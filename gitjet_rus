@@ -54,7 +54,7 @@ cd "$LOCAL_PATH" || exit 1
 git init
 
 # Создаём README.md
-echo "# $PROJECT_NAME" > README.md
+echo "# $PROJECT_NAME" >> README.md
 
 git add .
 

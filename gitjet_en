@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ==============================
-# Настройки
+# Settings
 # ==============================
 FIRST_COMMIT_MSG="initial commit"
 BRANCH_NAME="master"
@@ -9,34 +9,36 @@ GIT_NAME="git_username"
 GIT_MAIL="git_user_email"
 
 # ==============================
-# Проверка аргументов
+# Checking arguments
 # ==============================
 if [ $# -eq 0 ]; then
-    echo "Ошибка: Укажите адрес удаленного репозитория как аргумент."
-    echo "Пример: $0 https://github.com/user/repo.git"
+    echo "Error: Specify the address of the remote repository as an argument. "
+    echo "Example: $0 https://github.com/user/repo.git"
     exit 1
 fi
 
 REMOTE_URL="$1"
 
 # ==============================
-# Определяем путь и директорию
+# Defining the path and directory
 # ==============================
-read -p "Введите путь к локальной директории для инициализации репозитория (по умолчанию — текущая): " LOCAL_PATH
+read -p "Enter the path to the local directory to initialize the repository (current by default): " LOCAL_PATH
 if [ -z "$LOCAL_PATH" ]; then
     LOCAL_PATH="$(pwd)"
 fi
 
-# Создание директории, если её нет
+# Creating a directory if there is none
 if [ ! -d "$LOCAL_PATH" ]; then
     mkdir -p "$LOCAL_PATH"
 fi
-
-# Извлекаем имя директории как предложение для имени проекта
+# ==============================
+# Extract the directory name as a
+# suggestion for the project name
+# ==============================
 DEFAULT_PROJECT_NAME="$(basename "$LOCAL_PATH")"
 
 # ==============================
-# Подтверждение имени проекта
+# Project Name confirmation
 # ==============================
 read -p "Использовать '$DEFAULT_PROJECT_NAME' как имя проекта? [Y/n]: " CONFIRM
 
@@ -53,28 +55,29 @@ cd "$LOCAL_PATH" || exit 1
 
 git init
 
-# Создаём README.md
-echo "# $PROJECT_NAME" > README.md
+# Creating README.md
+echo "# $PROJECT_NAME" >> README.md
 
 git add .
 
-# Настраиваем Git-пользователя
+# Setting up a Git user
 git config user.name "$GIT_NAME"
 git config user.email "$GIT_MAIL"
 
-# Проверяем конфигурацию
+# Checking the configuration
 git config --local --list
 
-# Первый коммит
+# The first commit
 git commit -m "$FIRST_COMMIT_MSG"
 
-# Переименовываем ветку
+# Renaming the branch
 git branch -M "$BRANCH_NAME"
 
-# Добавляем удалённый репозиторий
+
+# Adding a remote repository
 git remote add origin "$REMOTE_URL"
 
-# Пушим в основную ветку
+# Push to the main branch
 git push -u origin "$BRANCH_NAME"
 
-echo "✅ Репозиторий успешно инициализирован в '$LOCAL_PATH' с именем проекта '$PROJECT_NAME'."
+echo "✅ The repository has been successfully initialized to '$LOCAL_PATH' with the project name '$PROJECT_NAME'."
